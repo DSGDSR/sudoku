@@ -1,0 +1,20 @@
+.homepage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.homepage__logo {
+  width: 300px;
+  margin: 2.5em 0 1em 0;
+}
+
+main.homepage__container {
+  display: flex;
+  flex-direction: column;
+}
+
+main button {
+  margin-bottom: 1em;
+}

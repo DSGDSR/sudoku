@@ -1,0 +1,20 @@
+.number-inputs {
+  user-select: none;
+  margin: 0 0 3em 0;
+}
+
+.number-inputs__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  border-radius: 5px;
+  padding: 0 .5em;
+}
+
+.number-inputs__button {
+  padding: .25em .25em;
+  font-size: 2rem;
+  cursor: pointer;
+  flex: 1 1 15%;
+  width: 0.5em;
+}

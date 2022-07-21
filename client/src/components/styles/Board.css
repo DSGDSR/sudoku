@@ -1,0 +1,50 @@
+.board-container {
+  margin: 0 auto;
+  width: fit-content;
+} 
+
+.sudoku-board {
+  margin: 1em 0 4em 0;
+  position: relative;
+}
+
+.sudoku-board::before {
+  content: '';
+  top: -23%;
+  left: -22%;
+  height: 135%;
+  width: 135%;
+  position: absolute;
+  background: url('../../../assets/paperbg.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  z-index: -10;
+}
+
+.sudoku-board::after {
+  position: absolute;
+  content: '';
+  width: calc(100% - 50px);
+  height: calc(100% - 50px);
+  top: -45px; left: -45px;
+  border: 70px solid transparent;
+  /*border-image: url('../../../assets/ring-border.svg') 15% round;*/
+  pointer-events: none;
+}
+
+.sudoku-board__row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.board-top-buttons {
+  margin: 0 0 2em 0;
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  top: 1.5em; left: 2em
+}
