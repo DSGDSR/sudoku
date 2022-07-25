@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Difficulty } from '../interfaces/difficulty.enum';
 import { GameStatus, GameType } from '../interfaces/game.enum';
-import { saveSudokuGame } from '../services/storage.service';
+import { deleteSudokuGame, saveSudokuGame } from '../services/storage.service';
 import { validateGame } from '../utils/validators';
 import BoardTopBar from './BoardTopBar';
 import Button, { ButtonSizes } from './Button';
@@ -19,12 +19,14 @@ interface BoardProps {
   solution?: ISudokuBoard;
   errors?: number;
   time?: number;
+  countdown?: boolean;
   changeStatus: (status: GameStatus) => void;
+  onCountdownFinish?: () => void;
   back: () => void;
 }
 
 const Board = (props: BoardProps) => {
-  const { difficulty, status, mode, changeStatus, back } = props;
+  const { difficulty, status, mode, countdown, changeStatus, onCountdownFinish, back } = props;
 
   const [sudoku, setSudoku] = useState<ISudokuBoard>(props.sudoku ?? []);
   const [solution, setSolution] = useState<ISudokuBoard>(props.solution ?? []);
@@ -33,6 +35,7 @@ const Board = (props: BoardProps) => {
 
   const [selectedCell, setSelectedCell] = useState<[number, number]>([-1, -1]);
   const [selectedNumber, setSelectedNumber] = useState<number>(-2);
+  const [completedNumbers, setCompletedNumbers] = useState<number[]>([]);
 
   useEffect(() => {
     if (status === GameStatus.InProgress) generateSudoku();
@@ -49,6 +52,7 @@ const Board = (props: BoardProps) => {
 
   const generateSudoku = () => {
     if (sudoku.length) {
+      checkCompletedNumbers();
       return;
     }
 
@@ -58,6 +62,7 @@ const Board = (props: BoardProps) => {
     const { puzzle, solution } = creator.createSudoku(difficulty);
     setSudoku(puzzle);
     setSolution(solution);
+    checkCompletedNumbers();
   };
 
   const backToMenu = () => {
@@ -72,17 +77,20 @@ const Board = (props: BoardProps) => {
     setSelectedNumber(sudoku[y][x]);
   };
 
-  const checkError = (input: number): boolean => {
+  const checkError = (input: number): boolean | null => {
     const numSolution = solution[selectedCell[0]][selectedCell[1]];
 
     if (numSolution !== input) {
       setErrors((errors) => {
         return errors + 1;
       });
+
       if (errors >= 2) {
-        cleanSudoku();
         alert('You lost');
         changeStatus(GameStatus.Finished);
+        deleteSudokuGame(mode);
+        back();
+        return null;
       }
 
       return true;
@@ -91,7 +99,9 @@ const Board = (props: BoardProps) => {
     return false;
   };
 
-  const saveGame = (err = false) => {
+  const saveGame = (err: boolean | null = false) => {
+    if (err === null) return;
+
     saveSudokuGame(
       {
         board: sudoku,
@@ -103,6 +113,18 @@ const Board = (props: BoardProps) => {
       mode
     );
   };
+
+  const checkCompletedNumbers = (): void => {
+    const completedNums: number[] = [];
+    sudoku.forEach((row, rowIdx) => {
+      row.forEach((cell, cellIdx) => {
+        if (cell >= 0 && cell === solution[rowIdx][cellIdx]) {
+          completedNums.push(cell + 1);
+        }
+      });
+    });
+    setCompletedNumbers(completedNums);
+  }
 
   const enterValue = (input: number | string): void => {
     if (
@@ -116,6 +138,7 @@ const Board = (props: BoardProps) => {
       setSudoku(newBoard);
       setSelectedNumber(number);
       saveGame(isError);
+      checkCompletedNumbers();
 
       if (validateGame(newBoard, solution)) {
         alert('You win!');
@@ -148,6 +171,7 @@ const Board = (props: BoardProps) => {
     };
 
     arrowActions[event.key]();
+    event.preventDefault();
     onSelect(newSelectedCell[1], newSelectedCell[0]);
   };
 
@@ -162,7 +186,7 @@ const Board = (props: BoardProps) => {
     '1,2,3,4,5,6,7,8,9',
     (event) => enterValue(event.key),
     { enabled: hasSudokuStarted() },
-    [sudoku, solution, selectedCell, errors, time]
+    [sudoku, solution, selectedCell, errors, time, status]
   );
 
   return !!sudoku?.length ? (
@@ -180,7 +204,9 @@ const Board = (props: BoardProps) => {
           errors={errors}
           status={status}
           startTime={time}
+          countdown={countdown}
           setBoardTime={setTime}
+          onCountdownFinish={onCountdownFinish}
         />
         <div className="sudoku-board">
           {sudoku.map((row, rowIndex) => (
@@ -202,7 +228,7 @@ const Board = (props: BoardProps) => {
             </div>
           ))}
         </div>
-        <NumberInputRow onNumberPress={enterValue} />
+        <NumberInputRow completedNumbers={completedNumbers} onNumberPress={enterValue} />
       </div>
     </>
   ) : (

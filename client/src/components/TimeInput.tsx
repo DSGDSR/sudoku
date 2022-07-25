@@ -2,7 +2,7 @@ import { SyntheticEvent } from 'react';
 import InputMask from 'react-input-mask';
 
 interface TimeInputProps {
-  value: number;
+  value: string;
   onChange: (value: SyntheticEvent) => void;
 }
 

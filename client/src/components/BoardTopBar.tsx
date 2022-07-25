@@ -8,11 +8,13 @@ interface BoardTopBarProps {
   startTime: number;
   errors: number;
   status: GameStatus;
+  countdown?: boolean;
   setBoardTime: (time: number) => void;
+  onCountdownFinish?: () => void;
 }
 
 const BoardTopBar = (props: BoardTopBarProps) => {
-  const { difficulty, errors, startTime, status, setBoardTime } = props;
+  const { difficulty, errors, startTime, status, countdown, setBoardTime, onCountdownFinish } = props;
 
   return (
     <div className="board-top-bar">
@@ -25,7 +27,9 @@ const BoardTopBar = (props: BoardTopBarProps) => {
           <Stopwatch
             running={status === GameStatus.InProgress}
             startTime={startTime}
+            countdown={countdown}
             setBoardTime={setBoardTime}
+            onTimeFinish={onCountdownFinish}
           />
         </span>
         <span className="board-top-bar__errors">

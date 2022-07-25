@@ -5,7 +5,7 @@ import TimeInput from '../components/TimeInput';
 import { Difficulty } from '../interfaces/difficulty.enum';
 import { GameStatus, GameType } from '../interfaces/game.enum';
 import { GameSavedata } from '../interfaces/storage.interface';
-import { loadSudokuGame } from '../services/storage.service';
+import { deleteSudokuGame, loadSudokuGame } from '../services/storage.service';
 
 interface AgainstTheClockProps {
   back: () => void;
@@ -15,12 +15,20 @@ const AgainstTheClock = ({ back }: AgainstTheClockProps) => {
   const [saveGame, setSaveGame] = useState<GameSavedata | null>(null);
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.Easy);
   const [status, setStatus] = useState<GameStatus>(GameStatus.Waiting);
-  const [timeLimit, setTimeLimit] = useState<string | null>('1000');
+  const [timeLimit, setTimeLimit] = useState<number>(300);
+  const [timeLimitStr, setTimeLimitStr] = useState<string>('05:00');
 
   useEffect(() => {
     const save = loadSudokuGame(GameType.AgainstTheClock);
     setSaveGame(save);
   }, []);
+
+  const convertStrToSeconds = (timeStr: string): number => {
+    const [minutes, secs] = timeStr.split(":");
+    const seconds = +minutes * 60 + +secs;
+
+    return seconds;
+  }
 
   return (
     <>
@@ -58,10 +66,12 @@ const AgainstTheClock = ({ back }: AgainstTheClockProps) => {
               <option value={Difficulty.Expert}>Expert</option>
             </select>
             <TimeInput
-              value={timeLimit}
+              value={timeLimitStr}
               onChange={(event) => {
-                setTimeLimit((event as InputEvent).target.value);
-                console.log((event as InputEvent).target.value);
+                const timeStr = ((event as InputEvent).target?.value as string).slice(0, 5);
+                const time = convertStrToSeconds(timeStr)
+                setTimeLimitStr(timeStr);
+                setTimeLimit(time);
               }}
             />
           </div>
@@ -89,8 +99,15 @@ const AgainstTheClock = ({ back }: AgainstTheClockProps) => {
           sudoku={saveGame?.board}
           solution={saveGame?.solution}
           errors={saveGame?.errors}
-          time={saveGame?.time}
+          time={saveGame ? saveGame.time : timeLimit}
+          countdown={true}
           back={back}
+          onCountdownFinish={() => {
+            // ToDo lose modal
+            alert('time has finished :(((( cry! u bix');
+            deleteSudokuGame(GameType.AgainstTheClock);
+            back();
+          }}
         />
       )}
     </>

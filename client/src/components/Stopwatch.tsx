@@ -7,19 +7,24 @@ interface StopwatchProps {
   running?: boolean;
   countdown?: boolean;
   setBoardTime: (time: number) => void;
+  onTimeFinish?: () => void;
 }
 
 const Stopwatch = (props: StopwatchProps) => {
-  const { limit, startTime, running, countdown, setBoardTime } = props;
+  const { limit, startTime, running, countdown, setBoardTime, onTimeFinish } = props;
   const [time, setTime] = useState(startTime ?? 0);
 
   useEffect(() => {
     let interval: number;
     if (running) {
-      interval = setInterval(() => {
-        setTime((prevTime) => (countdown ? prevTime - 1 : prevTime + 1));
-        setBoardTime(time);
-      }, 1000);
+      if (countdown && time === 0 && onTimeFinish) {
+        onTimeFinish();
+      } else {
+        interval = setInterval(() => {
+          setTime((prevTime) => (countdown ? prevTime - 1 : prevTime + 1));
+          setBoardTime(time);
+        }, 1000);
+      }
     } else {
       clearInterval(interval);
     }
