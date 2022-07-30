@@ -6,6 +6,7 @@ import AgainstTheClock from './AgainstTheClock';
 import IndividualGame from './IndividualGame';
 
 import './styles/HomePage.css';
+import VersusGame from './VersusGame';
 
 const HomePage = () => {
   const [gameType, setGameType] = useState<GameType>(GameType.None);
@@ -39,6 +40,9 @@ const HomePage = () => {
         )}
         {gameType === GameType.AgainstTheClock && (
           <AgainstTheClock back={() => setGameType(GameType.None)} />
+        )}
+        {gameType === GameType.Multiplayer && (
+          <VersusGame back={() => setGameType(GameType.Multiplayer)} />
         )}
       </main>
     </div>
