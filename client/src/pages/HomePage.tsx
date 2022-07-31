@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import logo from '../../assets/logo.svg';
 import Button, { ButtonSizes } from '../components/Button';
 import { GameType } from '../interfaces/game.enum';
 import AgainstTheClock from './AgainstTheClock';
 import IndividualGame from './IndividualGame';
+import VersusGame from './VersusGame';
 
 import './styles/HomePage.css';
-import VersusGame from './VersusGame';
 
 const HomePage = () => {
   const [gameType, setGameType] = useState<GameType>(GameType.None);

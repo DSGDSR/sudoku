@@ -18,7 +18,7 @@ const VersusGame = ({ back }: VersusGameProps) => {
   const [status, setStatus] = useState<GameStatus>(GameStatus.Waiting);
 
   useEffect(() => {
-    const conn = connect('http://localhost:3001', { transports: ['websocket', 'polling', 'flashsocket'] });
+    const conn = connect('http://localhost:3001', { transports: ['websocket'] });
     conn.on(SocketEvents.GENERATE_ROOM, (room) => console.log(room))
     conn.emit(SocketEvents.GENERATE_ROOM);
     const save = loadSudokuGame(GameType.Multiplayer);
