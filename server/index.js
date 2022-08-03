@@ -1,36 +1,52 @@
-import express from 'express';
-import http from 'http';
 import { Server } from 'socket.io';
-import cors from 'cors';
 import { EVENTS } from './utils/enums.js';
-import { continueGame, generateRoom, joinRoom, pauseGame, surrender } from './listeners.js';
+import {
+  continueGame,
+  generateRoom,
+  subscribeToRoom,
+  pauseGame,
+  surrender,
+  updateBoard,
+  joinRoom,
+} from './listeners.js';
+import r from 'rethinkdb';
 
-const app = express();
-//app.use(cors());
+const port = process.env.PORT || 8090;
+// TODO cors
+const io = new Server(port);
 
-const server = http.createServer(app);
+r.connect({
+  host: 'localhost',
+  port: 28015,
+  db: 'sudoku',
+})
+  .then((db) => {
+    io.on('connection', (client) => {
+      client.on(EVENTS.GENERATE_ROOM, (difficulty) =>
+        generateRoom(client, db, difficulty)
+      );
 
-const io = new Server(server, {
-  cors: {
-    origin: 'localhost:8080',
-    methods: ['GET', 'POST'],
-  },
-});
+      client.on(EVENTS.JOIN_ROOM, (roomId) => joinRoom(client, db, roomId));
 
-server.listen(3001, () => {
-  console.log('Server listening on port 3001');
-});
+      client.on(EVENTS.SUBSCRIBE_TO_ROOM, (roomId, userId) =>
+        subscribeToRoom(client, db, roomId, userId)
+      );
 
-io.on('connection', (socket) => {
-  socket.on(EVENTS.GENERATE_ROOM, () => generateRoom(socket));
+      client.on(EVENTS.UPDATE_BOARD, (roomId, userId, board, solution) =>
+        updateBoard(client, db, roomId, userId, board, solution)
+      );
 
-  socket.on(EVENTS.JOIN_ROOM, (roomId) => joinRoom(socket, roomId));
+      client.on(EVENTS.PAUSE_GAME, () => pauseGame(client));
 
-  socket.on(EVENTS.PAUSE_GAME, () => pauseGame(socket));
+      client.on(EVENTS.CONTINUE_GAME, () => continueGame(client));
 
-  socket.on(EVENTS.CONTINUE_GAME, () => continueGame(socket));
-
-  socket.on(EVENTS.SURRENDER, () => surrender(socket));
-});
+      client.on(EVENTS.SURRENDER, () => surrender(client));
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 // When disconnect control
+
+console.log(`Server listening on port ${port}`);

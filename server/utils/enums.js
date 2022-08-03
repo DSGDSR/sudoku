@@ -1,7 +1,11 @@
 export const EVENTS = {
-    GENERATE_ROOM: 'generate_room',
-    JOIN_ROOM: 'join_room',
-    PAUSE_GAME: 'pause_game',
-    CONTINUE_GAME: 'continue_game',
-    SURRENDER: 'surrender',
-}
+  GENERATE_ROOM: 'generate_room',
+  JOIN_ROOM: 'join_room',
+  SUBSCRIBE_TO_ROOM: 'subscribe_to_room',
+  ROOM_UPDATED: 'room_updated',
+  UPDATE_BOARD: 'update_board',
+  PAUSE_GAME: 'pause_game',
+  CONTINUE_GAME: 'continue_game',
+  USER_WIN: 'user_win',
+  SURRENDER: 'surrender',
+};
