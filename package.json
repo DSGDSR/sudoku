@@ -1,0 +1,18 @@
+{
+  "name": "sudokubox",
+  "version": "0.0.1",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "version-patch": "nodemon index.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run version-patch"
+    }
+  },
+  "devDependencies": {
+    "husky": "^8.0.1"
+  }
+}
