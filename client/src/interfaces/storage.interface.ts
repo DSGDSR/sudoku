@@ -7,4 +7,8 @@ export interface GameSavedata {
   errors: number;
   time: number;
   difficulty: Difficulty;
+
+  // Versus
+  roomId?: string;
+  userId?: 0 | 1;
 }

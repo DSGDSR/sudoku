@@ -1,6 +1,7 @@
 export enum GameStatus {
   Waiting,
   InProgress,
+  WaitingVersus,
   Finished,
 }
 
