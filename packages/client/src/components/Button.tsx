@@ -5,11 +5,11 @@ export enum ButtonSizes {
 }
 
 interface ButtonProps {
-  text: string;
+  text: any;
   size?: ButtonSizes;
   className?: string;
   style?: React.CSSProperties;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Button = (props: ButtonProps) => {
@@ -19,7 +19,7 @@ const Button = (props: ButtonProps) => {
     <button
       style={style ?? undefined}
       className={`${size ?? ''} ${className}`}
-      onClick={onClick}
+      onClick={() => onClick?.()}
     >
       {text}
     </button>

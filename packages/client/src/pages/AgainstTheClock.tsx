@@ -24,11 +24,11 @@ const AgainstTheClock = ({ back }: AgainstTheClockProps) => {
   }, []);
 
   const convertStrToSeconds = (timeStr: string): number => {
-    const [minutes, secs] = timeStr.split(":");
+    const [minutes, secs] = timeStr.split(':');
     const seconds = +minutes * 60 + +secs;
 
     return seconds;
-  }
+  };
 
   return (
     <>
@@ -68,8 +68,10 @@ const AgainstTheClock = ({ back }: AgainstTheClockProps) => {
             <TimeInput
               value={timeLimitStr}
               onChange={(event) => {
-                const timeStr = ((event as InputEvent).target?.value as string).slice(0, 5);
-                const time = convertStrToSeconds(timeStr)
+                const timeStr = (
+                  (event as InputEvent).target?.value as string
+                ).slice(0, 5);
+                const time = convertStrToSeconds(timeStr);
                 setTimeLimitStr(timeStr);
                 setTimeLimit(time);
               }}

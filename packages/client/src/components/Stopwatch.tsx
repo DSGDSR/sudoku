@@ -11,7 +11,8 @@ interface StopwatchProps {
 }
 
 const Stopwatch = (props: StopwatchProps) => {
-  const { limit, startTime, running, countdown, setBoardTime, onTimeFinish } = props;
+  const { limit, startTime, running, countdown, setBoardTime, onTimeFinish } =
+    props;
   const [time, setTime] = useState(startTime ?? 0);
 
   useEffect(() => {

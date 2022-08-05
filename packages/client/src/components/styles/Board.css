@@ -1,10 +1,10 @@
 .board-container {
   margin: 0 auto;
   width: fit-content;
-} 
+}
 
 .sudoku-board {
-  margin: 1em 0 4em 0;
+  margin: 1.25em 0 4em 0;
   position: relative;
 }
 
@@ -22,16 +22,16 @@
   z-index: -10;
 }
 
-.sudoku-board::after {
+/*.sudoku-board::after {
   position: absolute;
   content: '';
   width: calc(100% - 50px);
   height: calc(100% - 50px);
   top: -45px; left: -45px;
   border: 70px solid transparent;
-  /*border-image: url('../../../assets/ring-border.svg') 15% round;*/
+  border-image: url('../../../assets/ring-border.svg') 15% round;
   pointer-events: none;
-}
+}*/
 
 .sudoku-board__row {
   display: flex;
@@ -46,5 +46,6 @@
   display: flex;
   justify-content: space-between;
   position: fixed;
-  top: 1.5em; left: 2em
+  top: 1.5em;
+  left: 2em;
 }

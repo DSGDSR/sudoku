@@ -1,0 +1,10 @@
+.floating-menu__icon {
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+  padding: 6px 7px 2px 7px !important;
+}
+
+.floating-menu__icon label {
+  cursor: pointer;
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button, { ButtonSizes } from '../components/Button';
 import { GameType } from '../interfaces/game.enum';
 import AgainstTheClock from './AgainstTheClock';
@@ -7,8 +7,21 @@ import VersusGame from './VersusGame';
 
 import './styles/HomePage.css';
 
-const HomePage = () => {
+const HomePage = ({
+  socket,
+  urlParams,
+}: {
+  socket: any;
+  urlParams: URLSearchParams;
+}) => {
   const [gameType, setGameType] = useState<GameType>(GameType.None);
+
+  useEffect(() => {
+    const r = urlParams?.get('r');
+    if (r) {
+      setGameType(GameType.Multiplayer);
+    }
+  }, [urlParams]);
 
   return (
     <div className="homepage">
@@ -32,6 +45,16 @@ const HomePage = () => {
               text="Multiplayer"
               onClick={() => setGameType(GameType.Multiplayer)}
             />
+
+            <div className="margin-top-large displayflex">
+              <Button size={ButtonSizes.Medium} text="Settings" />
+              <Button
+                size={ButtonSizes.Medium}
+                text="Share"
+                className="margin-left-small"
+                style={{ padding: '13px 13px 11px 13px', marginTop: '2px' }}
+              />
+            </div>
           </>
         )}
         {gameType === GameType.Individual && (
@@ -41,7 +64,11 @@ const HomePage = () => {
           <AgainstTheClock back={() => setGameType(GameType.None)} />
         )}
         {gameType === GameType.Multiplayer && (
-          <VersusGame back={() => setGameType(GameType.Multiplayer)} />
+          <VersusGame
+            socket={socket}
+            back={() => setGameType(GameType.None)}
+            urlParams={urlParams}
+          />
         )}
       </main>
     </div>

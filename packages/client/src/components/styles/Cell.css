@@ -10,23 +10,30 @@
   justify-content: center;
   box-sizing: border-box;
   user-select: none;
-  color: rgba(0, 0, 0, .8);
+  color: rgba(0, 0, 0, 0.8);
   outline: none;
 }
 
-.cell[attr-y="8"] {
+.cell[attr-y='8'] {
   border-bottom: none;
-} .cell[attr-x="8"] {
+}
+.cell[attr-x='8'] {
   border-right: none;
 }
-.cell[attr-x="2"], .cell[attr-x="5"] {
+.cell[attr-x='2'],
+.cell[attr-x='5'] {
   border-right: 1px solid #2a2a2a;
-} .cell[attr-x="3"], .cell[attr-x="6"] {
+}
+.cell[attr-x='3'],
+.cell[attr-x='6'] {
   border-left: 1px solid #2a2a2a;
 }
-.cell[attr-y="2"], .cell[attr-y="5"] {
+.cell[attr-y='2'],
+.cell[attr-y='5'] {
   border-bottom: 1px solid #2a2a2a;
-} .cell[attr-y="3"], .cell[attr-y="6"] {
+}
+.cell[attr-y='3'],
+.cell[attr-y='6'] {
   border-top: 1px solid #2a2a2a;
 }
 

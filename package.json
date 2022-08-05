@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "license": "MIT",
   "type": "module",
+  "private": true,
+  "workspaces": [
+    "packages/**"
+  ],
   "scripts": {},
   "devDependencies": {
     "husky": "^8.0.1"

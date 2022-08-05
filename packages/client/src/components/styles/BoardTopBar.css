@@ -2,7 +2,7 @@
   margin: 1em 0 0 0;
   display: flex;
   justify-content: flex-end;
-  padding: .25em;
+  padding: 0.25em;
   position: relative;
 }
 
@@ -11,7 +11,8 @@
   font-weight: 500;
   font-size: 1.25em;
   transform: rotate(-6deg);
-  left: .5em; top: 1.2em;
+  left: 0.5em;
+  top: 1em;
   text-transform: lowercase;
 }
 
@@ -21,7 +22,8 @@
   align-items: flex-end;
 }
 
-.board-top-bar__errors {}
+.board-top-bar__errors {
+}
 .board-top-bar__errors__count {
   font-weight: bold;
   color: #df6e6e;
@@ -33,12 +35,12 @@
 .board-top-bar__stopwatch {
   display: flex;
   font-size: 1.2em;
-  margin-bottom: 1em
+  margin-bottom: 0.6em;
 }
 
 .board-top-bar__stopwatch img {
-  height: .9em;
-  margin-right: .35em;
+  height: 0.9em;
+  margin-right: 0.35em;
 }
 
 .board-top-bar__stopwatch__numbers {

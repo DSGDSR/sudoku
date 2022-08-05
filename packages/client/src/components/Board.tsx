@@ -10,6 +10,8 @@ import Button, { ButtonSizes } from './Button';
 import Cell from './Cell';
 import NumberInputRow from './NumberInputRow';
 import './styles/Board.css';
+import sudokuBg from '../../assets/paperbg.svg';
+import NumberPad from './NumberPad';
 
 interface BoardProps {
   difficulty: Difficulty;
@@ -23,10 +25,25 @@ interface BoardProps {
   changeStatus: (status: GameStatus) => void;
   onCountdownFinish?: () => void;
   back: () => void;
+  onChange?: (
+    sudoku: ISudokuBoard,
+    solution: ISudokuBoard,
+    x: number,
+    y: number
+  ) => void;
 }
 
 const Board = (props: BoardProps) => {
-  const { difficulty, status, mode, countdown, changeStatus, onCountdownFinish, back } = props;
+  const {
+    difficulty,
+    status,
+    mode,
+    countdown,
+    changeStatus,
+    onCountdownFinish,
+    back,
+    onChange,
+  } = props;
 
   const [sudoku, setSudoku] = useState<ISudokuBoard>(props.sudoku ?? []);
   const [solution, setSolution] = useState<ISudokuBoard>(props.solution ?? []);
@@ -65,11 +82,6 @@ const Board = (props: BoardProps) => {
     checkCompletedNumbers();
   };
 
-  const backToMenu = () => {
-    saveGame();
-    back();
-  };
-
   const hasSudokuStarted = () => !!sudoku.length;
 
   const onSelect = (x: number, y: number) => {
@@ -77,8 +89,11 @@ const Board = (props: BoardProps) => {
     setSelectedNumber(sudoku[y][x]);
   };
 
-  const checkError = (input: number): boolean | null => {
-    const numSolution = solution[selectedCell[0]][selectedCell[1]];
+  const checkError = (
+    cell: [number, number],
+    input: number
+  ): boolean | null => {
+    const numSolution = solution[cell[0]][cell[1]];
 
     if (numSolution !== input) {
       setErrors((errors) => {
@@ -89,6 +104,7 @@ const Board = (props: BoardProps) => {
         alert('You lost');
         changeStatus(GameStatus.Finished);
         deleteSudokuGame(mode);
+        // TODO
         back();
         return null;
       }
@@ -124,29 +140,34 @@ const Board = (props: BoardProps) => {
       });
     });
     setCompletedNumbers(completedNums);
-  }
+  };
 
   const enterValue = (input: number | string): void => {
-    if (
-      sudoku[selectedCell[0]][selectedCell[1]] !==
-      solution[selectedCell[0]][selectedCell[1]]
-    ) {
-      const number = +input - 1;
-      const newBoard: ISudokuBoard = [...sudoku];
-      const isError = checkError(number);
-      newBoard[selectedCell[0]][selectedCell[1]] = number;
-      setSudoku(newBoard);
-      setSelectedNumber(number);
-      saveGame(isError);
-      checkCompletedNumbers();
+    setSelectedCell((lastCell) => {
+      if (
+        sudoku[lastCell[0]][lastCell[1]] !== solution[lastCell[0]][lastCell[1]]
+      ) {
+        const number = +input - 1;
+        const newBoard: ISudokuBoard = [...sudoku];
+        const isError = checkError(lastCell, number);
+        newBoard[lastCell[0]][lastCell[1]] = number;
+        setSudoku(newBoard);
+        setSelectedNumber(number);
+        saveGame(isError);
+        checkCompletedNumbers();
 
-      if (validateGame(newBoard, solution)) {
-        alert('You win!');
-        changeStatus(GameStatus.Finished);
-        cleanSudoku();
-        // TODO delete game from storage
+        onChange?.(newBoard, solution, lastCell[0], lastCell[1]);
+
+        if (validateGame(newBoard, solution)) {
+          alert('You win!');
+          changeStatus(GameStatus.Finished);
+          cleanSudoku();
+          // TODO delete game from storage
+        }
       }
-    }
+
+      return lastCell;
+    });
   };
 
   const arrowNavigation = (event: KeyboardEvent) => {
@@ -191,14 +212,11 @@ const Board = (props: BoardProps) => {
 
   return !!sudoku?.length ? (
     <>
+      <NumberPad
+        onInputNumber={enterValue}
+        completedNumbers={completedNumbers}
+      />
       <div className="board-container">
-        <div className="board-top-buttons">
-          <Button
-            text="Back to main menu"
-            onClick={backToMenu}
-            size={ButtonSizes.Small}
-          />
-        </div>
         <BoardTopBar
           difficulty={difficulty}
           errors={errors}
@@ -228,7 +246,10 @@ const Board = (props: BoardProps) => {
             </div>
           ))}
         </div>
-        <NumberInputRow completedNumbers={completedNumbers} onNumberPress={enterValue} />
+        <NumberInputRow
+          completedNumbers={completedNumbers}
+          onNumberPress={enterValue}
+        />
       </div>
     </>
   ) : (

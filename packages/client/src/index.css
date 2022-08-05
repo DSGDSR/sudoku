@@ -5,7 +5,7 @@ body {
   /*font-family: 'Quicksand', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: url('https://www.getpapercss.com/img/geometry2.png')
+  background: url('../assets/bg.png');
 }
 
 code {

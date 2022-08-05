@@ -3,7 +3,7 @@ import { connect, Socket } from 'socket.io-client';
 import HomePage from './pages/HomePage';
 
 import './App.css';
-import '../node_modules/papercss/dist/paper.min.css';
+import 'papercss/dist/paper.min.css';
 import FloatingMenu from './components/FloatingMenu';
 
 function App() {

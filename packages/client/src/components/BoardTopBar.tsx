@@ -14,7 +14,15 @@ interface BoardTopBarProps {
 }
 
 const BoardTopBar = (props: BoardTopBarProps) => {
-  const { difficulty, errors, startTime, status, countdown, setBoardTime, onCountdownFinish } = props;
+  const {
+    difficulty,
+    errors,
+    startTime,
+    status,
+    countdown,
+    setBoardTime,
+    onCountdownFinish,
+  } = props;
 
   return (
     <div className="board-top-bar">
