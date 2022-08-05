@@ -6,11 +6,9 @@ import { GameStatus, GameType } from '../interfaces/game.enum';
 import { deleteSudokuGame, saveSudokuGame } from '../services/storage.service';
 import { validateGame } from '../utils/validators';
 import BoardTopBar from './BoardTopBar';
-import Button, { ButtonSizes } from './Button';
 import Cell from './Cell';
 import NumberInputRow from './NumberInputRow';
 import './styles/Board.css';
-import sudokuBg from '../../assets/paperbg.svg';
 import NumberPad from './NumberPad';
 
 interface BoardProps {

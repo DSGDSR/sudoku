@@ -11,12 +11,11 @@ interface StopwatchProps {
 }
 
 const Stopwatch = (props: StopwatchProps) => {
-  const { limit, startTime, running, countdown, setBoardTime, onTimeFinish } =
-    props;
+  const { startTime, running, countdown, setBoardTime, onTimeFinish } = props;
   const [time, setTime] = useState(startTime ?? 0);
 
   useEffect(() => {
-    let interval: number;
+    let interval: NodeJS.Timer;
     if (running) {
       if (countdown && time === 0 && onTimeFinish) {
         onTimeFinish();

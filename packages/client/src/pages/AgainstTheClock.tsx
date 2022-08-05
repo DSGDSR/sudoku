@@ -67,10 +67,8 @@ const AgainstTheClock = ({ back }: AgainstTheClockProps) => {
             </select>
             <TimeInput
               value={timeLimitStr}
-              onChange={(event) => {
-                const timeStr = (
-                  (event as InputEvent).target?.value as string
-                ).slice(0, 5);
+              onChange={(event: any) => {
+                const timeStr = (event.target?.value as string).slice(0, 5);
                 const time = convertStrToSeconds(timeStr);
                 setTimeLimitStr(timeStr);
                 setTimeLimit(time);
