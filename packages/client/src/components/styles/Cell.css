@@ -45,7 +45,7 @@
   border: 2px solid #5f9ae4;
   border-radius: 5px;
   transform: scale(1.15);
-  z-index: 100;
+  z-index: 10;
 }
 .cell.error {
   color: #df6e6e;
