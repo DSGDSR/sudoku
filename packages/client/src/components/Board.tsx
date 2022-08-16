@@ -77,7 +77,7 @@ const Board = (props: BoardProps) => {
     const { puzzle, solution } = creator.createSudoku(difficulty);
     setSudoku(puzzle);
     setSolution(solution);
-    checkCompletedNumbers();
+    checkCompletedNumbers(puzzle, solution);
   };
 
   const hasSudokuStarted = () => !!sudoku.length;
@@ -128,11 +128,17 @@ const Board = (props: BoardProps) => {
     );
   };
 
-  const checkCompletedNumbers = (): void => {
+  const checkCompletedNumbers = (
+    _sudoku?: ISudokuBoard,
+    _solution?: ISudokuBoard
+  ): void => {
+    _sudoku = _sudoku.length ? _sudoku : sudoku;
+    _solution = _solution.length ? _solution : solution;
+
     const completedNums: number[] = [];
-    sudoku.forEach((row, rowIdx) => {
+    _sudoku.forEach((row, rowIdx) => {
       row.forEach((cell, cellIdx) => {
-        if (cell >= 0 && cell === solution[rowIdx][cellIdx]) {
+        if (cell >= 0 && cell === _solution[rowIdx][cellIdx]) {
           completedNums.push(cell + 1);
         }
       });
