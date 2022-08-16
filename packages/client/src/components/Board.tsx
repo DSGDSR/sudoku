@@ -132,8 +132,8 @@ const Board = (props: BoardProps) => {
     _sudoku?: ISudokuBoard,
     _solution?: ISudokuBoard
   ): void => {
-    _sudoku = _sudoku.length ? _sudoku : sudoku;
-    _solution = _solution.length ? _solution : solution;
+    _sudoku = _sudoku?.length ? _sudoku : sudoku;
+    _solution = _solution?.length ? _solution : solution;
 
     const completedNums: number[] = [];
     _sudoku.forEach((row, rowIdx) => {
